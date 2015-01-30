@@ -1,19 +1,25 @@
 #include <stdio.h>
+#include <math.h>
 
-const float croot2 = 1.259921;
+const int n = 15;
 
 int cube(int x) {return x*x*x;}
-float croot_(float x, float c) {
-    if(x<2) {float eps=x-1; return (1+eps/3-eps*eps/9+4*eps*eps*eps/81)*c;} // Taylor
-    if(x<8) {return croot_(x/2, croot2*c);}
-    return croot_(x/8, 2*c);
-} float croot(float x) {return croot_(x, 1);}
-
+float croot(int x) {return pow(x, 1.0/3);}
+int is_int(float x) {return x==(int)x;}
 
 int main(int argc, const char * argv[])
 {
-    for(int i=0; i<400; i+=20) {
-        printf("%d\t%f\n", i, croot(cube(i)));
+    for(int a=0; a<=n; ++a) {
+        for(int b=0; b<=a; ++b) {
+            int sum = cube(a)+cube(b);
+            int clim = (int)(croot(sum-cube(b)));
+            if(clim>b) {clim=b;}
+            for(int c=0; c<clim; ++c) {
+                int d3 = sum-cube(c);
+                float d = croot(d3);
+                if(is_int(d)) {printf("%d: %d^3+%d^3=%d^3+%d^3\n", sum, a, b, c, (int)d);}
+            }
+        }
     }
     return 0;
 }
