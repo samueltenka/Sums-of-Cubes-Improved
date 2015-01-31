@@ -2,21 +2,29 @@
 #include <math.h>
 
 const int n = 2000;
+typedef long long int nat;
 
-long cube(int x) {return x*x*x;}
-float croot(long x) {return pow(x, 1.0/3);}
-bool is_int(float x) {return x==(int)x;}
+nat cube(nat x) {return x*x*x;}
+double croot(nat x) {return pow(x, 1.0/3);}
+int is_int(float x) {return x==(nat)x;}
+
+void proclaim_match(nat sum, nat a, nat b, nat c, nat d) {
+    static nat count=0; count+=1;
+    printf("#%d\t %lld = %d^3+%d^3=%d^3+%d^3\n", count, sum, a, b, c, (int)d);
+}
 
 int main(int argc, const char * argv[])
 {
-    for(int a=1; a<=n; ++a) {
-        for(int b=1; b<a; ++b) {
-            int sum = cube(a)+cube(b);
-            for(int c=a-1; c>b; --c) {
-                long c3 = cube(c);
-                long d3 = sum-cube(c); if(d3>c3) {break;}
-                float d = croot(d3);
-                if(is_int(d)) {printf("%d: %d^3+%d^3=%d^3+%d^3\n", sum, a, b, c, (int)d);}
+    for(nat a=1; a<=n; ++a) {
+        for(nat b=1; b<a; ++b) {
+            nat sum = cube(a)+cube(b);
+            for(nat c=a-1; c>b; --c) {
+                nat c3 = cube(c);
+                nat d3 = sum-cube(c); if(d3>c3) {break;}
+                double d = croot(d3);
+                if(is_int(d)) {proclaim_match(sum, a, b, c, d);
+                    
+                }
             }
         }
     }
